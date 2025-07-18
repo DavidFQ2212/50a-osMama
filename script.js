@@ -1,16 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Cuenta regresiva para el cumpleaños
-    const birthdayDate = new Date('July 20, 2025 00:00:00').getTime(); // **¡IMPORTANTE: Cambia esta fecha a la fecha real del cumpleaños de tu mamá!**
+    // **¡IMPORTANTE: Cambia esta fecha a la fecha real del cumpleaños de tu mamá!**
+    // La fecha actual es 17 de julio de 2025
+    const birthdayDate = new Date('July 16, 2025 00:00:00').getTime(); 
+    
     const countdownElement = document.getElementById('countdown');
+    const heroSection = document.querySelector('.hero');
+    const confettiColors = ['#fce77d', '#ff9f43', '#f870ba', '#a0ced9', '#adf7b6', '#d4af37'];
+    const numberOfConfetti = 50;
 
+    // Función para generar confeti
+    function generateConfetti() {
+        if (!heroSection) return; // Salir si el heroSection no existe
+
+        for (let i = 0; i < numberOfConfetti; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            
+            const randomColor = confettiColors[(Math.random() * confettiColors.length) | 0];
+            confetti.style.backgroundColor = randomColor;
+            
+            confetti.style.left = `${Math.random() * 100}vw`; // Posición horizontal aleatoria
+            confetti.style.animationDelay = `${Math.random() * 5}s`; // Retraso aleatorio
+            confetti.style.animationDuration = `${4 + Math.random() * 3}s`; // Duración aleatoria
+            
+            const randomOffsetX = (Math.random() * 40 - 20); // Desplazamiento horizontal para la animación
+            confetti.style.setProperty('--random-x', `${randomOffsetX}vw`);
+            
+            heroSection.appendChild(confetti);
+        }
+    }
+
+    // Llama a la función para generar el confeti al cargar la página
+    generateConfetti();
+
+    // Lógica de la cuenta regresiva
     if (countdownElement) {
         const updateCountdown = setInterval(() => {
-            const now = new Date().getTime();
+            const now = Date.now();
             const distance = birthdayDate - now;
 
             if (distance < 0) {
                 clearInterval(updateCountdown);
                 countdownElement.innerHTML = "¡Feliz Cumpleaños, Mamá Edith!";
+                // Cuando el contador llega a cero, activar fuegos artificiales
+                startFireworks();
                 return;
             }
 
@@ -28,21 +61,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }
 
-    // Animación de aparición al hacer scroll
-    const faders = document.querySelectorAll('.fade-in');
+    // Función para generar un único fuego artificial
+    function createFirework() {
+        if (!heroSection) return; // Salir si el heroSection no existe
 
+        const firework = document.createElement('div');
+        firework.classList.add('firework');
+        
+        // Posición horizontal aleatoria para que aparezcan en diferentes lugares
+        firework.style.left = `${Math.random() * 80 + 10}vw`; 
+        // Posición vertical inicial (un poco fuera de la vista para simular ascenso)
+        firework.style.bottom = `${-5 + Math.random() * 15}vh`; 
+        
+        heroSection.appendChild(firework);
+
+        // AUMENTADO: Número de chispas por fuego artificial (más denso)
+        const numberOfSparks = 60 + Math.floor(Math.random() * 60); // Entre 60 y 120 chispas
+        
+        // Colores más vibrantes y diversos
+        const fireworkColors = [
+            '#FF4081', '#E040FB', '#7C4DFF', '#448AFF', '#18FFFF', '#69F0AE', '#FFEA00', '#FFAB40', '#FF6E40', '#CDDC39',
+            '#F44336', '#9C27B0', '#3F51B5', '#00BCD4', '#8BC34A', '#FFEB3B', '#FF5722' // Más colores
+        ];
+        const color = fireworkColors[(Math.random() * fireworkColors.length) | 0];
+
+        for (let i = 0; i < numberOfSparks; i++) {
+            const spark = document.createElement('span');
+            spark.classList.add('spark');
+            spark.style.backgroundColor = color;
+
+            const angle = Math.random() * Math.PI * 2; // Ángulo de 0 a 360 grados
+            // AUMENTADO: Velocidad y distancia para que la explosión sea más grande
+            const speed = 4 + Math.random() * 4; // Velocidad de expansión más rápida
+            const distance = 150 + Math.random() * 150; // Distancia de vuelo de la chispa (más lejos)
+
+            // Usamos CSS variables para pasar los valores a la animación
+            spark.style.setProperty('--dx', `${Math.cos(angle) * speed * distance}px`);
+            spark.style.setProperty('--dy', `${Math.sin(angle) * speed * distance}px`); 
+            
+            // Retraso individual para cada chispa para un efecto de explosión más natural
+            spark.style.animationDelay = `${Math.random() * 0.4}s`; // Mayor variación en el delay
+
+            firework.appendChild(spark);
+        }
+
+        // AUMENTADO: Dar más tiempo para que la animación se vea completa
+        setTimeout(() => {
+            firework.remove();
+        }, 3000); // Duración total de la animación del fuego artificial
+    }
+
+    // Función para iniciar la generación continua de fuegos artificiales
+    function startFireworks() {
+        // Generar varios fuegos artificiales al inicio para un efecto más "wow"
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createFirework, i * 200); // Disparar los primeros 3 rápidamente
+        }
+        
+        // Luego continuar generando fuegos artificiales a un ritmo constante
+        const fireworkInterval = setInterval(createFirework, 600); // Crea un fuego artificial cada 600ms (más rápido)
+
+        // Detener los fuegos artificiales después de un tiempo (ej. 15 segundos)
+        setTimeout(() => {
+            clearInterval(fireworkInterval);
+        }, 15000); // Mostrar fuegos artificiales por más tiempo
+    }
+
+    // Animación de aparición al hacer scroll (sin cambios)
+    const faders = document.querySelectorAll('.fade-in');
     const appearOptions = {
-        threshold: 0.3, // Cuando el 30% del elemento sea visible
-        rootMargin: "0px 0px -50px 0px" // Un poco antes de llegar al final del viewport
+        threshold: 0.3,
+        rootMargin: "0px 0px -50px 0px"
     };
 
-    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
         entries.forEach(entry => {
-            if (!entry.isIntersecting) {
-                return;
-            } else {
+            if (entry.isIntersecting) {
                 entry.target.classList.add('appear');
-                appearOnScroll.unobserve(entry.target); // Dejar de observar una vez que ha aparecido
+                observer.unobserve(entry.target);
             }
         });
     }, appearOptions);
@@ -50,85 +146,4 @@ document.addEventListener('DOMContentLoaded', () => {
     faders.forEach(fader => {
         appearOnScroll.observe(fader);
     });
-
-    // Manejo del formulario de mensajes (solo front-end, necesitaría un backend real)
-    const wishForm = document.querySelector('.wish-form');
-    const messagesDisplay = document.getElementById('messages-display');
-
-    if (wishForm && messagesDisplay) {
-        // Cargar mensajes existentes (simulado con localStorage)
-        let messages = JSON.parse(localStorage.getItem('momBirthdayMessages')) || [];
-
-        const renderMessages = () => {
-            if (messages.length === 0) {
-                messagesDisplay.innerHTML = '<p class="placeholder-message">¡Sé el primero en dejar un lindo mensaje para mamá!</p>';
-                return;
-            }
-            messagesDisplay.innerHTML = '';
-            // Ordenar mensajes por fecha, el más reciente primero
-            const sortedMessages = messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            sortedMessages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message-item');
-                messageDiv.innerHTML = `
-                    <p><strong>${msg.name}:</strong></p>
-                    <p>${msg.message}</p>
-                    <small>${new Date(msg.timestamp).toLocaleDateString()} ${new Date(msg.timestamp).toLocaleTimeString()}</small>
-                `;
-                messagesDisplay.appendChild(messageDiv); // Añadir el nuevo mensaje al final
-            });
-        };
-
-        renderMessages();
-
-        wishForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-
-            if (name && message) {
-                const newMessage = {
-                    name,
-                    message,
-                    timestamp: new Date().toISOString()
-                };
-                messages.push(newMessage);
-                localStorage.setItem('momBirthdayMessages', JSON.stringify(messages)); // Guardar en localStorage
-                renderMessages(); // Volver a renderizar para mostrar el nuevo mensaje
-                wishForm.reset(); // Limpiar el formulario
-                // alert('¡Tu mensaje ha sido enviado! (Este es un envío simulado)'); // Comentado para una experiencia más fluida
-            } else {
-                alert('Por favor, completa todos los campos.');
-            }
-        });
-    }
-
-    // Generar confeti con JavaScript
-    const heroSection = document.querySelector('.hero');
-    const confettiColors = ['#fce77d', '#ff9f43', '#f870ba', '#a0ced9', '#adf7b6', '#d4af37']; // Tus colores de confeti
-    const numberOfConfetti = 50; // Cantidad de partículas de confeti
-
-    if (heroSection) {
-        for (let i = 0; i < numberOfConfetti; i++) {
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
-
-            const randomColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-            confetti.style.backgroundColor = randomColor;
-
-            const randomX = Math.random() * 100; // Posición inicial X entre 0 y 100%
-            confetti.style.left = `${randomX}vw`;
-
-            const randomDelay = Math.random() * 5; // Retraso de animación entre 0 y 5 segundos
-            confetti.style.animationDelay = `${randomDelay}s`;
-
-            const randomDuration = 4 + Math.random() * 3; // Duración de animación entre 4 y 7 segundos
-            confetti.style.animationDuration = `${randomDuration}s`;
-
-            const randomOffsetX = (Math.random() * 40 - 20); // Desplazamiento horizontal aleatorio para la animación
-            confetti.style.setProperty('--random-x', `${randomOffsetX}vw`);
-
-            heroSection.appendChild(confetti);
-        }
-    }
 });

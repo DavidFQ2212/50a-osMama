@@ -110,17 +110,19 @@ p {
     background-size: cover;
     background-position: center;
     overflow: hidden;
-    background-image: linear-gradient(to bottom, rgba(231, 153, 164, 0.5), rgba(255, 192, 203, 0.3)); /* Un fondo rosa degradado */
+    /* Fondo base para el hero, el overlay lo hará más opaco */
+    background-color: #f7d2e3; /* Un rosa claro para el fondo */
 }
 
-.header-overlay { /* Usé un::before en la versión anterior para el degradado, este ya no es necesario si se usa background-image en .hero */
+.header-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top, rgba(229, 152, 172, 0.7), rgba(255, 192, 203, 0.5)); /* Degradado de rosa sutil */
-    z-index: 1;
+    /* REDUCIDA LA OPACIDAD DEL DEGRADADO para que el confeti/fuegos se vean */
+    background: linear-gradient(to top, rgba(229, 152, 172, 0.4), rgba(255, 192, 203, 0.2)); /* Degradado de rosa más transparente */
+    z-index: 1; /* Encima del confeti */
 }
 
 .header-content {
@@ -163,33 +165,62 @@ p {
     backdrop-filter: blur(5px);
 }
 
-/* Confeti Animation (se genera mediante JS) */
-/* El HTML no tiene elementos .confetti, los crearemos con JS si quieres una gran cantidad.
-   Si quieres un confeti puramente CSS sin JS, necesitarías agregar muchos <span> o <div> con la clase 'confetti' directamente en el HTML del header.
-   Para mantener la limpieza del HTML, y ya que hay un archivo script.js, podemos generar el confeti con JS.
-   Dejaré las reglas CSS para el confeti aquí, asumiendo que JS los generará. */
-
+/* Confeti Animation (generado por JS) */
 .confetti {
     position: absolute;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    opacity: 0;
+    opacity: 0; /* Inicialmente transparente, la animación lo hará visible */
     animation: fall 5s linear infinite;
-    z-index: 0; /* Asegurar que esté detrás del contenido */
-    /* Las propiedades top y left se establecerán en JS */
+    z-index: 0; /* ASEGÚRATE de que esté por debajo del overlay y contenido */
+    /* top, left, animation-delay, animation-duration, --random-x se establecerán en JS */
 }
 
 @keyframes fall {
     0% {
-        top: -50px;
+        top: -5%; /* Empieza un poco más arriba */
         opacity: 1;
         transform: translateX(0) rotate(0deg) scale(1);
     }
     100% {
-        top: 100%;
+        top: 105%; /* Termina un poco más abajo */
         opacity: 0.7;
-        transform: translateX(var(--random-x, 0)) rotate(360deg) scale(0.7); /* Añadido valor por defecto para --random-x */
+        transform: translateX(var(--random-x, 0)) rotate(360deg) scale(0.7);
+    }
+}
+
+/* Estilos para los fuegos artificiales */
+.firework {
+    position: absolute;
+    pointer-events: none; /* No interactuable */
+    z-index: 3; /* Asegurar que estén por encima del contenido y confeti */
+    /* bottom y left se establecerán con JS */
+}
+
+.spark {
+    position: absolute;
+    /* AUMENTADO: Tamaño inicial de las chispas para que sean más grandes */
+    width: 8px; 
+    height: 8px;
+    border-radius: 50%;
+    /* AUMENTADO: Duración de la animación para que se extienda más */
+    animation: explode 2.5s ease-out forwards; /* Más tiempo para la explosión */
+    transform: translate(0, 0); /* Punto de inicio de la explosión */
+    filter: drop-shadow(0 0 5px currentColor); /* Agrega un pequeño brillo */
+}
+
+@keyframes explode {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    50% { /* Mantiene la opacidad alta más tiempo */
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(0.3); /* Se mueve y encoge */
     }
 }
 
@@ -304,7 +335,6 @@ p {
     border-radius: 5px;
     display: inline-block;
     font-weight: bold;
-    margin-bottom: 10px;
     font-family: 'Dancing Script', cursive;
     font-size: 1.3em;
 }
@@ -333,84 +363,6 @@ p {
     font-size: 1em;
 }
 
-/* Wishes Section */
-.wish-form {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin: 0 auto 50px;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: var(--primary-pink);
-    font-size: 1.1em;
-}
-
-/* CORRECCIÓN: input[type="text"] en lugar de inputtype="text"] */
-.form-group input[type="text"],
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Playfair Display', serif;
-    font-size: 1em;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* CORRECCIÓN: input[type="text"] en lugar de inputtype="text"] */
-.form-group input[type="text"]:focus,
-.form-group textarea:focus {
-    border-color: var(--secondary-gold);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-    outline: none;
-}
-
-.btn-submit {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: var(--primary-pink);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-submit:hover {
-    background-color: #d87d89; /* Tono de rosa un poco más oscuro */
-    transform: translateY(-2px);
-}
-
-.messages-display {
-    margin-top: 40px;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.placeholder-message {
-    text-align: center;
-    color: #888;
-    font-style: italic;
-}
-
 /* Footer */
 footer {
     background-color: var(--primary-pink);
@@ -423,8 +375,6 @@ footer {
 }
 
 /* Escondiendo detalles: Mariposas y Delfines */
-
-/* Mariposas en el fondo de una sección (ej. Intro) */
 .intro {
     position: relative;
     overflow: hidden; /* Asegura que las mariposas no se desborden */
@@ -491,7 +441,6 @@ footer {
     0% { left: -50px; }
     100% { left: 100%; } /* Atraviesa la pantalla */
 }
-
 
 /* Animaciones de aparición */
 .fade-in {
