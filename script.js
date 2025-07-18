@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Cuenta regresiva para el cumpleaños
-    const birthdayDate = new Date('July 23, 2025 00:00:00').getTime(); // **¡IMPORTANTE: Cambia esta fecha a la fecha real del cumpleaños de tu mamá!**
+    const birthdayDate = new Date('July 20, 2025 00:00:00').getTime(); // **¡IMPORTANTE: Cambia esta fecha a la fecha real del cumpleaños de tu mamá!**
     const countdownElement = document.getElementById('countdown');
 
     if (countdownElement) {
@@ -58,14 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (wishForm && messagesDisplay) {
         // Cargar mensajes existentes (simulado con localStorage)
         let messages = JSON.parse(localStorage.getItem('momBirthdayMessages')) || [];
-        
+
         const renderMessages = () => {
             if (messages.length === 0) {
                 messagesDisplay.innerHTML = '<p class="placeholder-message">¡Sé el primero en dejar un lindo mensaje para mamá!</p>';
                 return;
             }
             messagesDisplay.innerHTML = '';
-            messages.forEach(msg => {
+            // Ordenar mensajes por fecha, el más reciente primero
+            const sortedMessages = messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sortedMessages.forEach(msg => {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message-item');
                 messageDiv.innerHTML = `
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>${msg.message}</p>
                     <small>${new Date(msg.timestamp).toLocaleDateString()} ${new Date(msg.timestamp).toLocaleTimeString()}</small>
                 `;
-                messagesDisplay.prepend(messageDiv); // Añadir el nuevo mensaje al principio
+                messagesDisplay.appendChild(messageDiv); // Añadir el nuevo mensaje al final
             });
         };
 
@@ -94,10 +96,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('momBirthdayMessages', JSON.stringify(messages)); // Guardar en localStorage
                 renderMessages(); // Volver a renderizar para mostrar el nuevo mensaje
                 wishForm.reset(); // Limpiar el formulario
-                alert('¡Tu mensaje ha sido enviado! (Este es un envío simulado)');
+                // alert('¡Tu mensaje ha sido enviado! (Este es un envío simulado)'); // Comentado para una experiencia más fluida
             } else {
                 alert('Por favor, completa todos los campos.');
             }
         });
+    }
+
+    // Generar confeti con JavaScript
+    const heroSection = document.querySelector('.hero');
+    const confettiColors = ['#fce77d', '#ff9f43', '#f870ba', '#a0ced9', '#adf7b6', '#d4af37']; // Tus colores de confeti
+    const numberOfConfetti = 50; // Cantidad de partículas de confeti
+
+    if (heroSection) {
+        for (let i = 0; i < numberOfConfetti; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+
+            const randomColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+            confetti.style.backgroundColor = randomColor;
+
+            const randomX = Math.random() * 100; // Posición inicial X entre 0 y 100%
+            confetti.style.left = `${randomX}vw`;
+
+            const randomDelay = Math.random() * 5; // Retraso de animación entre 0 y 5 segundos
+            confetti.style.animationDelay = `${randomDelay}s`;
+
+            const randomDuration = 4 + Math.random() * 3; // Duración de animación entre 4 y 7 segundos
+            confetti.style.animationDuration = `${randomDuration}s`;
+
+            const randomOffsetX = (Math.random() * 40 - 20); // Desplazamiento horizontal aleatorio para la animación
+            confetti.style.setProperty('--random-x', `${randomOffsetX}vw`);
+
+            heroSection.appendChild(confetti);
+        }
     }
 });

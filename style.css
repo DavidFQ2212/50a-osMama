@@ -101,19 +101,19 @@ p {
 /* Header/Hero Section */
 .hero {
     position: relative;
-    height: 100vh; /* Altura de la sección hero */
+    height: 70vh; /* Altura de la sección hero */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: white;
-    background-image: url('https://w0.peakpx.com/wallpaper/406/255/HD-wallpaper-pink-background-pink-simple.jpg'); /* Fondo sutil de textura rosa, puedes cambiarlo */
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    background-image: linear-gradient(to bottom, rgba(231, 153, 164, 0.5), rgba(255, 192, 203, 0.3)); /* Un fondo rosa degradado */
 }
 
-.header-overlay {
+.header-overlay { /* Usé un::before en la versión anterior para el degradado, este ya no es necesario si se usa background-image en .hero */
     position: absolute;
     top: 0;
     left: 0;
@@ -125,7 +125,7 @@ p {
 
 .header-content {
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Asegurar que el contenido esté encima del overlay y el confeti */
     padding: 20px;
     animation: fadeInScale 1.5s ease-out forwards;
 }
@@ -163,6 +163,36 @@ p {
     backdrop-filter: blur(5px);
 }
 
+/* Confeti Animation (se genera mediante JS) */
+/* El HTML no tiene elementos .confetti, los crearemos con JS si quieres una gran cantidad.
+   Si quieres un confeti puramente CSS sin JS, necesitarías agregar muchos <span> o <div> con la clase 'confetti' directamente en el HTML del header.
+   Para mantener la limpieza del HTML, y ya que hay un archivo script.js, podemos generar el confeti con JS.
+   Dejaré las reglas CSS para el confeti aquí, asumiendo que JS los generará. */
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0;
+    animation: fall 5s linear infinite;
+    z-index: 0; /* Asegurar que esté detrás del contenido */
+    /* Las propiedades top y left se establecerán en JS */
+}
+
+@keyframes fall {
+    0% {
+        top: -50px;
+        opacity: 1;
+        transform: translateX(0) rotate(0deg) scale(1);
+    }
+    100% {
+        top: 100%;
+        opacity: 0.7;
+        transform: translateX(var(--random-x, 0)) rotate(360deg) scale(0.7); /* Añadido valor por defecto para --random-x */
+    }
+}
+
 /* Intro Section */
 .intro {
     text-align: center;
@@ -186,6 +216,10 @@ p {
     overflow: hidden;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 250px; /* Establece una altura fija para todos los contenedores de imagen */
+    display: flex; /* Usar flexbox para centrar la imagen */
+    align-items: center; /* Centrado vertical */
+    justify-content: center; /* Centrado horizontal */
 }
 
 .gallery-item:hover {
@@ -195,10 +229,12 @@ p {
 
 .gallery-item img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: 100%; /* La imagen toma toda la altura del contenedor */
+    object-fit: contain; /* Ajusta la imagen al contenedor, mostrando todo sin recortar */
     display: block;
     border-bottom: 2px solid var(--primary-pink);
+    padding: 10px; /* Pequeño padding para que la imagen no toque los bordes */
+    background-color: #fff; /* Fondo blanco si la imagen no llena todo */
 }
 
 .gallery-note {
@@ -319,6 +355,7 @@ p {
     font-size: 1.1em;
 }
 
+/* CORRECCIÓN: input[type="text"] en lugar de inputtype="text"] */
 .form-group input[type="text"],
 .form-group textarea {
     width: 100%;
@@ -330,6 +367,7 @@ p {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* CORRECCIÓN: input[type="text"] en lugar de inputtype="text"] */
 .form-group input[type="text"]:focus,
 .form-group textarea:focus {
     border-color: var(--secondary-gold);
@@ -495,6 +533,10 @@ footer {
 
     .gallery-grid {
         grid-template-columns: 1fr;
+    }
+
+    .gallery-item {
+        height: 200px; /* Ajusta la altura de los items de la galería en móviles */
     }
 
     .timeline-item {
