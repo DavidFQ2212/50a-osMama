@@ -25,6 +25,7 @@ body {
     color: var(--text-dark);
     background-color: var(--bg-light);
     overflow-x: hidden; /* Evitar scroll horizontal */
+    font-size: 16px; /* Asegurar un tamaño de fuente base para la escalabilidad */
 }
 
 .container {
@@ -50,7 +51,7 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 3.5em;
+    font-size: 3em; /* Reducir ligeramente el tamaño del título principal */
     color: var(--text-light); /* Color diferente para el título del hero */
     text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
@@ -154,6 +155,10 @@ p {
     margin-top: 30px;
     color: var(--secondary-gold);
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    display: flex; /* Usar flexbox para el contador */
+    justify-content: center; /* Centrar los elementos del contador */
+    align-items: center;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan en pantallas pequeñas */
 }
 
 .countdown span {
@@ -163,7 +168,22 @@ p {
     padding: 5px 15px;
     border-radius: 8px;
     backdrop-filter: blur(5px);
+    white-space: nowrap; /* Evitar que el texto "Días", "Horas" se rompa */
 }
+
+/* Estilo específico para el mensaje de cumpleaños */
+#countdown.birthday-message {
+    font-size: 3em; /* Tamaño más grande para el mensaje de feliz cumpleaños */
+    margin-top: 30px;
+    color: var(--secondary-gold);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    /* Asegurarse de que el mensaje esté centrado y no se rompa */
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
 
 /* Confeti Animation (generado por JS) */
 .confetti {
@@ -480,7 +500,7 @@ footer {
 /* Responsive Design */
 @media (max-width: 768px) {
     h1 {
-        font-size: 2.5em;
+        font-size: 2em; /* Título principal más pequeño en móviles */
     }
 
     h2 {
@@ -492,11 +512,25 @@ footer {
     }
 
     .logo {
-        max-width: 200px;
+        max-width: 150px; /* Logo más pequeño en móviles */
     }
 
     .countdown {
-        font-size: 1.8em;
+        font-size: 1.5em; /* Contador más pequeño */
+        margin-top: 20px; /* Menos margen superior */
+    }
+
+    .countdown span {
+        padding: 3px 10px; /* Menos padding en los números */
+        margin: 0 5px; /* Menos margen entre los números */
+        font-size: 0.9em; /* Ajuste adicional del tamaño de fuente para los spans */
+    }
+
+    /* Estilo para el mensaje de cumpleaños en móviles */
+    #countdown.birthday-message {
+        font-size: 1.8em; /* Tamaño del mensaje de cumpleaños en móviles */
+        margin-top: 20px;
+        line-height: 1.3; /* Asegurar que el texto no se superponga */
     }
 
     .section-padding {

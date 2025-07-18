@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (distance < 0) {
                 clearInterval(updateCountdown);
                 countdownElement.innerHTML = "¡Feliz Cumpleaños, Mamá Edith!";
+                countdownElement.classList.add('birthday-message'); // Añadir clase para estilos específicos
                 // Cuando el contador llega a cero, activar fuegos artificiales
                 startFireworks();
                 return;
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>${minutes} Minutos</span>
                 <span>${seconds} Segundos</span>
             `;
+            countdownElement.classList.remove('birthday-message'); // Asegurar que la clase no esté antes de tiempo
         }, 1000);
     }
 
@@ -75,7 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         heroSection.appendChild(firework);
 
-        const numberOfSparks = 100 + Math.floor(Math.random() * 80); // ¡MÁS CHISPAS! (entre 100 y 180)
+        // --- MODIFICACIÓN PARA RENDIMIENTO ---
+        const numberOfSparks = 60 + Math.floor(Math.random() * 60); // Reducir el número de chispas
+        // --- FIN DE LA MODIFICACIÓN ---
 
         const fireworkColors = [
             '#FF4081', '#E040FB', '#7C4DFF', '#448AFF', '#18FFFF', '#69F0AE', '#FFEA00', '#FFAB40', '#FF6E40', '#CDDC39',
@@ -86,20 +90,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const animationDuration = 4 + Math.random() * 2; // Duración de la animación (4 a 6 segundos)
         firework.style.setProperty('--firework-duration', `${animationDuration}s`); // Pasar a CSS
 
-        // --- INICIO DE LA MODIFICACIÓN CLAVE ---
         // Decidir aleatoriamente si este fuego artificial se inclinará a la izquierda o a la derecha
         const directionBias = Math.random() < 0.5 ? 1 : -1; // 1 para derecha, -1 para izquierda
-        // --- FIN DE LA MODIFICACIÓN CLAVE ---
 
         for (let i = 0; i < numberOfSparks; i++) {
             const spark = document.createElement('span');
-            
+
             // Determinar si es una chispa tipo "cola" o "redonda"
             const isTailSpark = Math.random() < 0.6; // Aumentar la probabilidad de ser una "tira" (60%)
             spark.classList.add(isTailSpark ? 'firework-tail' : 'firework-spark');
-            
+
             // Establecer el color como una variable CSS para el efecto fluorescente
-            spark.style.setProperty('--spark-color', color); 
+            spark.style.setProperty('--spark-color', color);
 
             if (isTailSpark) {
                 // Rotación inicial para las chispas tipo "cola"
@@ -117,17 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // AUMENTADO: Simular gravedad para el efecto de caída
             const gravityEffect = i * 0.1; // Un pequeño efecto de "gravedad" para que caigan
 
-            // --- INICIO DE LA MODIFICACIÓN CLAVE ---
             // Ajustar el ángulo de las chispas según la dirección elegida
-            // Si directionBias es 1, se favorece el lado derecho (ángulo entre -PI/2 y PI/2)
-            // Si directionBias es -1, se favorece el lado izquierdo (ángulo entre PI/2 y 3*PI/2)
             let adjustedAngle;
             if (directionBias === 1) { // Derecha
                 adjustedAngle = (Math.random() * Math.PI) - (Math.PI / 2) + (Math.random() * 0.6 - 0.3); // Ángulos entre -90 y 90 grados
             } else { // Izquierda
                 adjustedAngle = (Math.random() * Math.PI) + (Math.PI / 2) + (Math.random() * 0.6 - 0.3); // Ángulos entre 90 y 270 grados
             }
-            // --- FIN DE LA MODIFICACIÓN CLAVE ---
 
             const dx = Math.cos(adjustedAngle) * speed * distance;
             const dy = Math.sin(adjustedAngle) * speed * distance + (distance * 0.2); // Añade una componente de caída
@@ -149,11 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para iniciar la generación continua de fuegos artificiales
     function startFireworks() {
         // Generar varios fuegos artificiales al inicio para un efecto más "wow"
-        for (let i = 0; i < 5; i++) { // ¡Más fuegos artificiales iniciales!
-            setTimeout(createFirework, i * 200); // Disparar los primeros rápidamente
+        for (let i = 0; i < 3; i++) { // Reducir la cantidad inicial de fuegos artificiales
+            setTimeout(createFirework, i * 300); // Disparar los primeros rápidamente
         }
 
-        const fireworkInterval = setInterval(createFirework, 400); // Crea un fuego artificial cada 400ms (muy rápido)
+        // --- MODIFICACIÓN PARA RENDIMIENTO ---
+        const fireworkInterval = setInterval(createFirework, 500); // Intervalo ligeramente mayor
+        // --- FIN DE LA MODIFICACIÓN ---
 
         // Detener los fuegos artificiales después de un tiempo (ej. 25 segundos)
         setTimeout(() => {
@@ -178,6 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, appearOptions);
 
     faders.forEach(fader => {
-            appearOnScroll.observe(fader);
+        appearOnScroll.observe(fader);
     });
 });
