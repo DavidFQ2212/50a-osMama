@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // **¡IMPORTANTE: Cambia esta fecha a la fecha real del cumpleaños de tu mamá!**
     // La fecha actual es 17 de julio de 2025
-    const birthdayDate = new Date('July 16, 2025 00:00:00').getTime();
+    const birthdayDate = new Date('July 1, 2025 00:00:00').getTime();
 
     const countdownElement = document.getElementById('countdown');
     const heroSection = document.querySelector('.hero');
