@@ -120,8 +120,8 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    /* REDUCIDA LA OPACIDAD DEL DEGRADADO para que el confeti/fuegos se vean */
-    background: linear-gradient(to top, rgba(229, 152, 172, 0.4), rgba(255, 192, 203, 0.2)); /* Degradado de rosa más transparente */
+    /* Ajuste: Hacemos el degradado más transparente para no ocultar los fuegos artificiales */
+    background: linear-gradient(to top, rgba(229, 152, 172, 0.2), rgba(255, 192, 203, 0.1));
     z-index: 1; /* Encima del confeti */
 }
 
@@ -198,31 +198,54 @@ p {
     /* bottom y left se establecerán con JS */
 }
 
-.spark {
+.firework-spark {
     position: absolute;
-    /* AUMENTADO: Tamaño inicial de las chispas para que sean más grandes */
-    width: 8px; 
-    height: 8px;
-    border-radius: 50%;
-    /* AUMENTADO: Duración de la animación para que se extienda más */
-    animation: explode 2.5s ease-out forwards; /* Más tiempo para la explosión */
+    border-radius: 50%; /* Por defecto, redondas */
+    animation: explode var(--firework-duration) ease-out forwards; /* Duración dinámica */
     transform: translate(0, 0); /* Punto de inicio de la explosión */
-    filter: drop-shadow(0 0 5px currentColor); /* Agrega un pequeño brillo */
+    will-change: transform, opacity; /* Optimización para animaciones */
+    /* Nuevo estilo para efecto fluorescente */
+    box-shadow: 0 0 15px var(--spark-color), 0 0 25px var(--spark-color); /* Sombra suave y extendida para un brillo más intenso */
+    opacity: 0; /* La animación controlará la opacidad */
 }
 
+.firework-tail {
+    position: absolute;
+    width: 3px; /* Un poco más delgado para las colas */
+    height: 15px; /* Un poco más cortas para las colas */
+    border-radius: 2px;
+    transform-origin: center bottom;
+    animation: explode-tail var(--firework-duration) ease-out forwards; /* Animación específica */
+    /* Nuevo estilo para efecto fluorescente en las colas */
+    background-color: var(--spark-color); /* El color viene de JS */
+    box-shadow: 0 0 10px var(--spark-color), 0 0 15px var(--spark-color); /* Sombra suave para la cola */
+    opacity: 0; /* La animación controlará la opacidad */
+}
+
+/* Animación principal para las chispas esféricas */
 @keyframes explode {
     0% {
         opacity: 1;
         transform: translate(0, 0) scale(1);
     }
-    50% { /* Mantiene la opacidad alta más tiempo */
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(0.3); /* Ligeramente más grandes al final */
+    }
+}
+
+/* Animación para las chispas con cola/tiras */
+@keyframes explode-tail {
+    0% {
         opacity: 1;
+        transform: translate(0, 0) scaleX(1) scaleY(1) rotate(var(--initial-rotation, 0deg));
     }
     100% {
         opacity: 0;
-        transform: translate(var(--dx), var(--dy)) scale(0.3); /* Se mueve y encoge */
+        transform: translate(var(--dx), var(--dy)) scaleX(0.5) scaleY(0.1);
     }
 }
+
 
 /* Intro Section */
 .intro {
