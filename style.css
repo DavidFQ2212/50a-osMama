@@ -275,7 +275,7 @@ p {
     animation: fadeIn 1s ease-out forwards;
 }
 
-/* Gallery Section */
+/* Gallery Section (Existente) */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -426,6 +426,82 @@ p {
     height: 100%;
     object-fit: cover; /* Recorta la imagen para que cubra completamente el contenedor */
     display: block;
+}
+
+
+
+
+
+.party-gallery {
+    text-align: center;
+    background-color: var(--bg-light); /* Utiliza la variable para consistencia */
+    /* Puedes añadir un patrón sutil de fondo si quieres que se diferencie más */
+    /* background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="10" fill="%23f7d2e3" opacity="0.2"/></svg>'); */
+    /* background-size: 50px; */
+}
+
+.party-gallery .mission-complete {
+    font-family: 'Dancing Script', cursive; /* Fuente elegante */
+    font-size: 3.5em; /* Un poco más grande para el wow factor */
+    color: var(--primary-pink); /* Usa la variable de color principal */
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.2); /* Sombra más pronunciada */
+    background: linear-gradient(45deg, var(--primary-pink), var(--secondary-gold)); /* Degradado para el texto */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block; /* Necesario para que el degradado funcione */
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 2px solid var(--secondary-gold);
+    box-shadow: 0 0 20px rgba(255,105,180,0.4); /* Brillo para el título */
+}
+
+.party-gallery .dedication {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25em; /* Ligeramente más grande */
+    color: var(--text-dark);
+    max-width: 850px; /* Un poco más de ancho */
+    margin: 0 auto 50px auto; /* Centrar y añadir más espacio abajo */
+    line-height: 1.7;
+    font-weight: 400; /* Asegurar que no esté en negrita por defecto */
+    padding: 0 15px; /* Pequeño padding para móviles */
+}
+
+/* Reutilizar los estilos de grid de la galería existente pero con clase específica */
+.party-gallery .party-photos { /* Se añade la clase party-photos */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px; /* Un poco menos de espacio entre fotos */
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.party-gallery .gallery-item {
+    border-radius: 12px; /* Ligeramente más redondeado */
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Sombra un poco más fuerte */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 220px; /* Ajusta la altura para las fotos de la fiesta */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.party-gallery .gallery-item:hover {
+    transform: translateY(-8px); /* Ligeramente menos desplazamiento */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.party-gallery .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Para las fotos de la fiesta, usualmente queremos que cubran */
+    display: block;
+    /* Eliminar el padding y el border-bottom si no son necesarios */
+    border: none;
+    padding: 0;
 }
 
 /* Footer */
@@ -592,5 +668,20 @@ footer {
 
     .timeline-image-container {
         height: 120px; /* Ajuste de altura para imágenes en móvil */
+    }
+
+    /* Responsive para la nueva galería de la fiesta */
+    .party-gallery .mission-complete {
+        font-size: 2.5em; /* Ajuste de tamaño para móviles */
+        padding: 8px 15px; /* Menos padding */
+    }
+
+    .party-gallery .dedication {
+        font-size: 1.1em;
+        margin-bottom: 30px;
+    }
+
+    .party-gallery .gallery-item {
+        height: 180px; /* Ajuste de altura de las fotos de la fiesta en móvil */
     }
 }
